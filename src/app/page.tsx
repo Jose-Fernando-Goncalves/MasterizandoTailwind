@@ -1,113 +1,262 @@
-import Image from 'next/image'
+'use client'
+import { Clock, File, Globe, Mail, Trash, UploadCloud, User } from "lucide-react"
+import { useAutoAnimate } from "@formkit/auto-animate/react"
+import * as React from "react"
 
 export default function Home() {
+  const [selected, setSelected] = React.useState(0)
+  const [image, setImage] = React.useState("")
+  const [files, setFiles] = React.useState(['José Fernando']);
+  const [bio, setBio] = React.useState("Tenho 21 anos e sou um programador Full Stack júnior. Desde o início da minha jornada na programação, descobri que minha maior força é a capacidade de aprendizado rápido. Sou alguém que acredita que a melhor maneira de crescer é enfrentando novos problemas e dominando novas habilidades. Trabalho com uma variedade de tecnologias, incluindo Next.js, React.js, React Native e o framework Laravel 9. Em relação à língua, possuo um nível médio de inglês que me permite entender documentação técnica e de desenvolvimento.")
+  const [parent] = useAutoAnimate();
+
+  function handleImage(e: any) {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+    }
+  };
+
+  function handleNewFile(e: any) {
+    const file = e.target.files[0];
+    if (file) {
+      setFiles((prevFiles) => {
+        return [...prevFiles, file.name];
+      });
+    }
+  };
+
+  function removeFile(index: any) {
+    const updatedFiles = [...files];
+    updatedFiles.splice(index, 1);
+    setFiles(updatedFiles);
+  }
+
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className="h-fit px-8">
+      <h1 className='text-cyan-500 text-2xl font-medium'>Settings</h1>
+
+      <div className="flex flex-row mt-6 border-b border-slate-800 gap-2">
+        <div onClick={() => setSelected(0)} className={`px-1 pb-4 text-sm font-medium ${selected === 0 ? 'border-b-2 border-cyan-500 text-cyan-400' : 'text-slate-400 hover:text-cyan-400'}`}>
+          My Details
+        </div>
+
+        <div onClick={() => setSelected(1)} className={`px-1 pb-4 text-sm font-medium ${selected === 1 ? 'border-b-2 border-cyan-500 text-cyan-400' : 'text-slate-400 hover:text-cyan-400'}`}>
+          Profile
+        </div>
+
+        <div onClick={() => setSelected(2)} className={`px-1 pb-4 text-sm font-medium ${selected === 2 ? 'border-b-2 border-cyan-500 text-cyan-400' : 'text-slate-400 hover:text-cyan-400'}`}>
+          Password
         </div>
       </div>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+      <div className="mt-6 flex flex-col">
+        <div className="flex justify-between items-center gap-2 border-b border-slate-800 pb-4">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-medium">Personal Info</h2>
+            <span className="text-sm text-slate-400">Update your photo and personal details here</span>
+          </div>
+          <div className="flex flex-row gap-4">
+            <button form="form" className="px-4 py-2 border rounded-md text-center font-medium text-sm hover:bg-slate-900" type="submit">
+              Cancel
+            </button>
+
+            <button form="form" className="px-4 py-2 bg-cyan-500 rounded-md text-center font-medium text-sm hover:bg-cyan-400" type="submit">
+              Save
+            </button>
+          </div>
+
+        </div>
+
+        <form id="form" className="mt-6 flex flex-col w-full pb-5 gap-10 divide-y divide-slate-800" action={''}>
+          <div className="grid grid-cols-form gap-3 pb-5">
+            <label htmlFor="FirstName" className="text-sm font-medium text-white">
+              Name
+            </label>
+            <div className="gap-6 grid grid-cols-2">
+              <input type="text" name="FirstName" defaultValue={'José Fernando'} id="FirstName" placeholder="José Fernando" className="input px-4 py-2 bg-transparent focus:outline-cyan-500 focus:outline-double outline-none border border-slate-800 rounded-md" />
+              <input type="text" placeholder="Gonçalves" defaultValue={'Gonçalves'} className="input px-4 py-2 bg-transparent border border-slate-800 rounded-md focus:outline-cyan-500 focus:outline-double outline-none" />
+            </div>
+            <div />
+          </div>
+
+          <div className="grid grid-cols-form gap-3 py-10">
+            <label htmlFor="email" className="text-sm font-medium text-white">
+              Email Address
+            </label>
+
+            <div className="relative">
+              <span className="absolute left-4 top-2">
+                <Mail />
+              </span>
+              <input
+                className="input px-4 pl-12 py-2 bg-transparent focus:outline-cyan-500 focus:outline-double outline-none border border-slate-800 rounded-md w-full"
+                type="text"
+                defaultValue={'rodocellcrz@gmail.com'}
+                name="fullName"
+                id="fullName"
+              />
+            </div>
+            <div />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-form gap-3 py-10">
+            <label htmlFor="email" className="text-sm font-medium text-white">
+              Your photo
+              <span className="text-sm text-slate-400 font-normal block mt-1">This will be displayed on your profile</span>
+            </label>
+
+
+            <div className="flex gap-6 items-start">
+              {image ?
+                <div className="w-20 h-20 flex items-center justify-center bg-cyan-400 rounded-full">
+                  <img src={image} alt="profile image" className="w-20 h-20 rounded-full" />
+                </div>
+                :
+                <div className="w-20 h-20 flex items-center justify-center bg-cyan-400 rounded-full">
+                  <User className="w-10 h-10 text-cyan-700" />
+                </div>}
+
+              <div className="lg:w-[90%] w-[80%] relative transition-all group h-full flex rounded-md items-center justify-center border border-slate-800 flex-col px-4 py-8 gap-4 hover:bg-cyan-800/20">
+                <input onChange={handleImage} className="w-full h-full opacity-0 bg-transparent absolute" accept="image/*" type="file" />
+                <div className="flex items-center justify-center w-16 h-16 bg-slate-600 transition-all border-slate-800 group-hover:bg-cyan-400 rounded-full border-8 group-hover:border-cyan-600 p-2">
+                  <UploadCloud className="w-14 h-14 text-cyan-50" />
+                </div>
+                <span className="text-2xl text-cyan-400">Drag and Drop</span>
+                <span className="text-sm text-slate-400">SVG, PNG JPG or GIF (Max 10MB)</span>
+              </div>
+
+            </div>
+          </div>
+
+          <div className="grid grid-cols-form gap-3 py-10">
+            <label htmlFor="role" className="text-sm font-medium text-white">
+              Role
+            </label>
+
+            <input type="text" name="role" defaultValue={'Programmer'} id="role" placeholder="Programmer" className="input px-4 py-2 w-full bg-transparent focus:outline-cyan-500 focus:outline-double outline-none border border-slate-800 rounded-md" />
+            <div />
+          </div>
+
+          <div className="grid grid-cols-form gap-3 py-10">
+            <label htmlFor="email" className="text-sm font-medium text-white">
+              Country
+            </label>
+
+            <div className="relative">
+              <span className="absolute left-4 top-2">
+                <Globe />
+              </span>
+              <select
+                className="input px-4 pl-12 py-2 bg-transparent focus:outline-cyan-500 focus:outline-double outline-none border border-slate-800 rounded-md w-full"
+                defaultValue={'Brasil'}
+                name="Country"
+                id="Country"
+              >
+                <option className="text-black" value={'Brasil'}>Brasil</option>
+                <option className="text-black" value={'United States'}>United States</option>
+                <option className="text-black" value={'Portugal'}>Portugal</option>
+              </select>
+            </div>
+            <div />
+          </div>
+
+
+          <div className="grid grid-cols-form gap-3 py-10">
+            <label htmlFor="email" className="text-sm font-medium text-white">
+              Timezone
+            </label>
+
+            <div className="relative">
+              <span className="absolute left-4 top-2">
+                <Clock />
+              </span>
+              <select
+                className="input px-4 pl-12 py-2 bg-transparent focus:outline-cyan-500 focus:outline-double outline-none border border-slate-800 rounded-md w-full"
+                defaultValue={'Brasil'}
+                name="Timezone"
+                id="Timezone"
+              >
+                <option className="text-black" value={'Brasil'}>America São Paulo (UTC-03:00)</option>
+                <option className="text-black" value={'Pacific'}>Pacific Stand Time (UTC-08:00)</option>
+              </select>
+            </div>
+            <div />
+          </div>
+
+          <div className="grid grid-cols-form gap-3 py-10">
+            <label htmlFor="email" className="text-sm font-medium text-white">
+              Bio
+              <span className="text-sm text-slate-400 font-normal block mt-1">This will be displayed on your profile</span>
+            </label>
+
+
+            <div className="flex gap-6 items-start flex-col">
+              <textarea onChange={(e) => setBio(e.target.value)} rows={12} defaultValue={bio} placeholder="Write your bio here..." className="w-full text-justify transition-all group h-full flex rounded-md items-center justify-center bg-transparent border focus:outline-cyan-500 focus:outline-double outline-none border-slate-800 flex-col px-4 py-2 resize-none">
+              </textarea>
+              <span className="text-sm text-slate-400">{bio.length} characters</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-form gap-3 py-10">
+            <label htmlFor="email" className="text-sm font-medium text-white">
+              Portfolio projects
+              <span className="text-sm text-slate-400 font-normal block mt-1">Share a few snippets of your work</span>
+            </label>
+
+            <div className="flex flex-col gap-5">
+              <div className="relative w-full transition-all group h-full flex rounded-md items-center justify-center border border-slate-800 flex-col px-4 py-8 gap-4 hover:bg-cyan-800/20">
+                <input onChange={handleNewFile} className="w-full h-full opacity-0 bg-transparent absolute" type="file" />
+                <div className="flex items-center justify-center w-16 h-16 bg-slate-600 transition-all border-slate-800 group-hover:bg-cyan-400 rounded-full border-8 group-hover:border-cyan-600 p-2">
+                  <UploadCloud className="w-14 h-14 text-cyan-50" />
+                </div>
+                <span className="text-2xl text-cyan-400">Drag and Drop</span>
+                <span className="text-sm text-slate-400">Share a few snippets</span>
+              </div>
+
+              <div ref={parent} className="flex flex-col gap-4">
+                {files && files.map((file, index) => (
+                  <div className="w-full transition-all h-fit flex rounded-md border border-slate-800 px-4 py-8">
+                    <div className="flex items-center justify-center w-16 h-16 bg-cyan-400 rounded-full p-2">
+                      <File className="w-10 h-10 text-cyan-700" />
+                    </div>
+
+                    <div className="flex relative flex-col gap-2 px-2 h-fit w-full">
+                      <span className="text-lg text-cyan-400">{file}</span>
+                      <div className="flex flex-row items-center justify-center gap-2">
+                        <div className="w-full bg-slate-800 h-2 rounded-r-full rounded-l-full">
+                          <div style={{ width: `33%` }} className="bg-cyan-400 h-full rounded-r-full rounded-l-full"></div>
+                        </div>
+                        <span className="text-sm text-slate-400">33%</span>
+                      </div>
+                      <Trash className="w-6 h-6 absolute text-red-400 right-4 hover:text-red-500" onClick={() => removeFile(index)} />
+                    </div>
+                  </div>
+                ))}
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div className="flex items-center justify-end pt-6">
+            <div className="flex flex-row gap-4">
+              <button form="form" className="px-4 py-2 border rounded-md text-center font-medium text-sm hover:bg-slate-900" type="submit">
+                Cancel
+              </button>
+
+              <button form="form" className="px-4 py-2 bg-cyan-500 rounded-md text-center font-medium text-sm hover:bg-cyan-400" type="submit">
+                Save
+              </button>
+            </div>
+          </div>
+
+        </form>
       </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </div>
   )
 }
